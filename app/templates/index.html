@@ -2,4 +2,11 @@
 
 {% block body %}
     <p>Hello World</p>
+    <div>
+        <ul>
+            {% for url in data %}
+            <a href={{url}}><li>{{url}}</li></a>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
