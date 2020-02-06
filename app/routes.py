@@ -1,7 +1,7 @@
 from app import app
 from flask import Flask, render_template, request, redirect, url_for
-# from scraper import scrape
 from . import scraper
+import time
 
 @app.route('/', methods=['GET'])
 def index():
@@ -14,6 +14,7 @@ def search():
     if search_query is None:
         return redirect('/')
     else:
+        time.sleep(2)
         data = scraper.scrape('https://www.bbc.co.uk/search?q=' + search_query + '&filter=news')
         print(data)
         return render_template('index.html', data=data)

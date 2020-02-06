@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block body %}
+    <form action="/" method="GET">
+        <input type="submit" value="HOME">
+    </form>
     <p>Hello World</p>
     <div class="searchbar">
         <form action="/search" method="POST">
