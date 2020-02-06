@@ -2,11 +2,19 @@
 
 {% block body %}
     <p>Hello World</p>
-    <div>
+    <div class="searchbar">
+        <form action="/search" method="POST">
+            <input type="text" name="search" placeholder="Search for your news articles here!">
+            <input type="submit" value="Search!"> 
+        </form>
+    </div>
+    {% if data %}
+    <div class="scraped_data">
         <ul>
             {% for url in data %}
             <a href={{url}}><li>{{url}}</li></a>
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
 {% endblock %}
