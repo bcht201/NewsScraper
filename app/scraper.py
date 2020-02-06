@@ -10,8 +10,6 @@ def scrape(url):
         a_tag = article.find('a')
         urls.append(a_tag.attrs['href'])
     data = urls[0:3]
-    print(len(urls))
-    print(urls)
     return urls
 
 # scrape("https://www.bbc.co.uk/search?q=trump&filter=news&suggid=")
