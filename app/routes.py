@@ -16,5 +16,8 @@ def search():
         return redirect('/')
     else:
         time.sleep(random.randint(0, 3))
-        links, titles = scraper.scrape('https://www.bbc.co.uk/search?q=' + search_query + '&filter=news')
-        return render_template('index.html', titles=titles, links=links)
+        data = scraper.scrape('https://www.bbc.co.uk/search?q=' + search_query + '&filter=news')
+
+
+        return render_template('index.html', infos=data)
+	
