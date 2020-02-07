@@ -15,6 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
 class scrapeData(db.Model):
+    __tablename__ = "scraped_data_all"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     link = db.Column(db.String(500), nullable=False)
@@ -49,7 +50,7 @@ def index():
 def search():
     keyword = request.form['search']
     scrape('https://www.bbc.co.uk/search?q=' + keyword + '&filter=news', keyword)
-    return 'should have written'
+    return render_template('index.html', )
 
 
 
