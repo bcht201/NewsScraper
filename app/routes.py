@@ -78,7 +78,7 @@ def search():
     execute = db.engine.execute(sql)
     infos = [row for row in execute]
     print(infos)
-    return render_template('index.html', infos=infos)
+    return render_template('index.html', infos=infos, recents=recents)
 
 
 
