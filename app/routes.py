@@ -41,6 +41,17 @@ def scrape(url, keyword):
         db.session.add(content)
         db.session.commit()
 
+def recent_keywords():
+    sql = text("SELECT DISTINCT source, keyword FROM scraped_data_all WHERE source='BBC'")
+    execute = db.engine.execute(sql)
+    return [row for row in execute]
+
+def check_keyword(keyword, recents):
+    status = False
+    for term in recents:
+        if keyword == term.keyword:
+            status = True
+    return status
 
 @app.route('/', methods=['GET'])
 def index():
@@ -52,12 +63,31 @@ def index():
 @app.route('/search', methods=['POST'])
 def search():
     keyword = request.form['search']
+    recents = recent_keywords()
+    print(recents)
+    print(type(recents))
+    print(recents[0])
+    print(type(recents[0]))
+    print(recents[0].keyword)
     if keyword is None:
         return redirect('/')
-    else:
+    elif check_keyword(keyword, recents) == False:
         time.sleep(random.randint(0, 3))
         scrape('https://www.bbc.co.uk/search?q=' + keyword + '&filter=news', keyword)
-        sql = text("SELECT title, link, keyword FROM scraped_data_all WHERE keyword='" + keyword + "'")
-        execute = db.engine.execute(sql)
-        infos = [row for row in execute]
-        return render_template('index.html', infos = infos)
+    sql = text("SELECT title, link, keyword FROM scraped_data_all WHERE keyword='" + keyword + "'")
+    execute = db.engine.execute(sql)
+    infos = [row for row in execute]
+    print(infos)
+    return render_template('index.html', infos=infos)
+
+
+
+
+@app.route('/delete')
+def delete():
+    sql = text("DELETE FROM scraped_data_all")
+    execute = db.engine.execute(sql)
+    return redirect('/')
+
+
+# testing
