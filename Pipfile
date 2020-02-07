@@ -9,6 +9,7 @@ verify_ssl = true
 flask = "*"
 bs4 = "*"
 requests = "*"
+flask-sqlalchemy = "*"
 
 [requires]
 python_version = "3.8"
