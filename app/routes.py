@@ -22,16 +22,24 @@ class scrapeData(db.Model):
     keyword = db.Column(db.String(100), nullable=False)
     date = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 
-# def scrape():
-#     content = scrapeData(
-#         title = "Hi",
-#         link = "www.google.com",
-#         source = "BBC",
-#         keyword = "cat"
-#     )
-#     db.session.add(content)
-#     db.session.commit()
-#     print("Wrote to db")
+def scrape(url, keyword):
+    result = requests.get(url)
+    src = result.content
+    soup = BeautifulSoup(src, "html.parser")
+    for article in soup.find_all("article"):
+        obj = {}
+        a_tag = article.find('a')
+        url = a_tag.attrs['href']
+        title = article.attrs['data-bbc-title']
+        content = scrapeData(
+            title = title,
+            link = url,
+            source = "BBC",
+            keyword = keyword
+        )
+        db.session.add(content)
+        db.session.commit()
+
 
 @app.route('/', methods=['GET'])
 def index():
@@ -39,6 +47,14 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
+    keyword = request.form['search']
+    scrape('https://www.bbc.co.uk/search?q=' + keyword + '&filter=news', keyword)
+    return 'should have written'
+
+
+
+
+
     # scrape()
     # search_query = request.form['search']
     # sql = text("SELECT keyword FROM scrapeData WHERE keyword LIKE '%" + search_query + "%'")
