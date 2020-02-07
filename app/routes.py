@@ -44,7 +44,10 @@ def scrape(url, keyword):
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    sql = text("SELECT DISTINCT keyword FROM scraped_data_all")
+    execute = db.engine.execute(sql)
+    recents = [row for row in execute]
+    return render_template('index.html', recents=recents)
 
 @app.route('/search', methods=['POST'])
 def search():
@@ -54,8 +57,7 @@ def search():
     else:
         time.sleep(random.randint(0, 3))
         scrape('https://www.bbc.co.uk/search?q=' + keyword + '&filter=news', keyword)
-        sql = text("SELECT title, link FROM scraped_data_all WHERE keyword='" + keyword + "'")
+        sql = text("SELECT title, link, keyword FROM scraped_data_all WHERE keyword='" + keyword + "'")
         execute = db.engine.execute(sql)
         infos = [row for row in execute]
-        print(infos)
         return render_template('index.html', infos = infos)
