@@ -61,3 +61,10 @@ def search():
         execute = db.engine.execute(sql)
         infos = [row for row in execute]
         return render_template('index.html', infos = infos)
+
+
+@app.route('/delete')
+def delete():
+    sql = text("DELETE FROM scraped_data_all")
+    execute = db.engine.execute(sql)
+    return redirect('/')
