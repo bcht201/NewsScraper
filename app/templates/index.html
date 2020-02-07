@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1>News Dashboard</h1>
+    <form action="/" method="GET">
+        <input type="submit" class="button is-danger is-medium - is-rounded is-outlined" value="HOME">
+    </form>
+    <div class="field">
+        <form action="/search" method="POST">
+            <input type="text" id="searchbar" class="input is-large is-danger is-rounded" name="search" placeholder="Search for your news articles here!" required>
+            <input type="submit" class="button is-danger is-outlined is-rounded" value="Search!"> 
+        </form>
+    </div>
+
+    {% if infos %}
+    <table class="table is-striped">
+        <tr>
+            <th>Article Titles</th>
+            <th>Source</th>
+        </tr>
+        {% for info in infos %}
+        <tr>
+            <a href={{info.link}}><td>{{info.title}}</td></a><br>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <table class="table">
+        <tr>
+            <th>Your recent searches</th>
+        </tr>
+        {% for recent in recents %}
+        <tr>
+            <td>{{recent.keyword}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+  
+{% endblock %}
