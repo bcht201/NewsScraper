@@ -131,11 +131,24 @@ def search():
 def cut_down(results, source):
     result_list = [result for result in results if result.source==source]
     array = []
-    for i in range(3):
-        array.append(random.choice(result_list))
+    count = 0
+    while len(array) < 4:
+        array.append(result_list[count])
+        count += 1
     return array
 
 
+@app.route('/search_recent')
+def search_recent():
+    recents = request.args.get('term')
+    sql = text("SELECT title, link, keyword, source FROM scraped_data_all WHERE keyword='" + recents + "'")
+    execute = db.engine.execute(sql)
+    infos = [row for row in execute]
+    daily_mail_sources = cut_down(infos, "Daily Mail")
+    the_sun_sources = cut_down(infos, "The Sun")
+    bbc_sources = cut_down(infos, "BBC")
+    infos = daily_mail_sources + the_sun_sources + bbc_sources
+    return render_template('index.html', infos=infos)
 
 
 @app.route('/delete')

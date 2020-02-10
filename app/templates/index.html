@@ -36,7 +36,7 @@
                     </tr>
                     {% for recent in recents %}
                     <tr>
-                        <td>{{recent.keyword}}</td>
+                        <td><a href="/search_recent?term={{recent.keyword}}">{{recent.keyword}}</a></td>
                     </tr>
                     {% endfor %}
                 </table>
