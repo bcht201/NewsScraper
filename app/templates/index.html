@@ -13,30 +13,34 @@
                     <input type="submit" class="button is-danger is-outlined is-rounded" value="Search!"> 
                 </form>
             </div>
-
-            {% if infos %}
-            <table class="table is-striped">
-                <tr>
-                    <th>Article Titles</th>
-                    <th>Source</th>
-                </tr>
-                {% for info in infos %}
-                <tr>
-                    <a href={{info.link}}></a><td>{{info.title}}</td></a><br>
-                </tr>
-                {% endfor %}
-            </table>
-            {% endif %}
-            <table class="table">
-                <tr>
-                    <th>Your recent searches</th>
-                </tr>
-                {% for recent in recents %}
-                <tr>
-                    <td>{{recent.keyword}}</td>
-                </tr>
-                {% endfor %}
-            </table>
+            <div>
+                {% if infos %}
+                <table class="table is-striped">
+                    <tr>
+                        <th>Article Titles</th>
+                        <th>Source</th>
+                    </tr>
+                    {% for info in infos %}
+                    <tr>
+                        <td><a href={{info.link}}>{{info.title}}</a></td>
+                        <td>{{info.source}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% endif %}
+            </div>
+            <div>
+                <table class="table">
+                    <tr>
+                        <th>Your recent searches</th>
+                    </tr>
+                    {% for recent in recents %}
+                    <tr>
+                        <td>{{recent.keyword}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
     </div>
   

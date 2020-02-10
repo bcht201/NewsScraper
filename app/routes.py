@@ -23,23 +23,49 @@ class scrapeData(db.Model):
     keyword = db.Column(db.String(100), nullable=False)
     date = db.Column(db.DateTime(), default=datetime.datetime.utcnow)
 
-def scrape(url, keyword):
-    result = requests.get(url)
-    src = result.content
-    soup = BeautifulSoup(src, "html.parser")
-    for article in soup.find_all("article"):
+def scrape_dm(url_dm, keyword):
+    result_dm = requests.get(url_dm)
+    src_dm = result_dm.content
+    soup_dm = BeautifulSoup(src_dm, "html.parser")
+    for article_dm in soup_dm.find_all('h3', {'class': 'sch-res-title'}):
         obj = {}
-        a_tag = article.find('a')
-        url = a_tag.attrs['href']
-        title = article.attrs['data-bbc-title']
-        content = scrapeData(
-            title = title,
-            link = url,
+        a_tag_dm = article_dm.find('a')
+        url_dm = a_tag_dm.attrs['href']
+        url_dm_to_save = "https://www.dailymail.co.uk/" + url_dm
+        title_dm = a_tag_dm.getText()
+
+        content_dm = scrapeData(
+            title = title_dm,
+            link = url_dm_to_save,
+            source = "Daily Mail",
+            keyword = keyword
+        )
+        db.session.add(content_dm)
+        db.session.commit()
+
+
+def scrape_bbc(url_bbc, keyword):
+    result_bbc = requests.get(url_bbc)
+    src_bbc = result_bbc.content
+    soup_bbc = BeautifulSoup(src_bbc, "html.parser")
+    for article_bbc in soup_bbc.find_all("article"):
+        obj = {}
+        a_tag_bbc = article_bbc.find('a')
+        url_bbc = a_tag_bbc.attrs['href']
+        title_bbc = article_bbc.attrs['data-bbc-title']
+        content_bbc = scrapeData(
+            title = title_bbc,
+            link = url_bbc,
             source = "BBC",
             keyword = keyword
         )
-        db.session.add(content)
+        db.session.add(content_bbc)
         db.session.commit()
+
+
+
+
+
 
 def recent_keywords():
     sql = text("SELECT DISTINCT source, keyword FROM scraped_data_all WHERE source='BBC'")
@@ -64,20 +90,21 @@ def index():
 def search():
     keyword = request.form['search']
     recents = recent_keywords()
-    print(recents)
-    print(type(recents))
-    print(recents[0])
-    print(type(recents[0]))
-    print(recents[0].keyword)
+    # print(recents)
+    # print(type(recents))
+    # print(recents[0])
+    # print(type(recents[0]))
+    # print(recents[0].keyword)
     if keyword is None:
         return redirect('/')
     elif check_keyword(keyword, recents) == False:
         time.sleep(random.randint(0, 3))
-        scrape('https://www.bbc.co.uk/search?q=' + keyword + '&filter=news', keyword)
-    sql = text("SELECT title, link, keyword FROM scraped_data_all WHERE keyword='" + keyword + "'")
+        scrape_dm('https://www.dailymail.co.uk/home/search.html?sel=site&searchPhrase=' + keyword, keyword)
+        scrape_bbc('https://www.bbc.co.uk/search?q=' + keyword + '&filter=news', keyword)
+    sql = text("SELECT title, link, keyword, source FROM scraped_data_all WHERE keyword='" + keyword + "'")
     execute = db.engine.execute(sql)
     infos = [row for row in execute]
-    print(infos)
+    # print(infos)
     return render_template('index.html', infos=infos, recents=recents)
 
 
@@ -89,5 +116,3 @@ def delete():
     execute = db.engine.execute(sql)
     return redirect('/')
 
-
-# testing
