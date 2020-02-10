@@ -43,6 +43,26 @@ def scrape_dm(url_dm, keyword):
         db.session.add(content_dm)
         db.session.commit()
 
+def scrape_ts(url_ts, keyword):
+    result_ts = requests.get(url_ts)
+    src_ts = result_ts.content
+    soup_ts = BeautifulSoup(src_ts, "html.parser")
+    for article_ts in soup_ts.find_all('a', {'class': 'text-anchor-wrap'}):
+        obj = {}
+        url_ts = article_ts.attrs['href']
+        # url_ts_to_save = "https://www.dailymail.co.uk/" + url_ts
+        title_location = article_ts.find('p')
+        title_ts = title_location.getText()
+
+        content_ts = scrapeData(
+            title = title_ts,
+            link = url_ts,
+            source = "The Sun",
+            keyword = keyword
+        )
+        db.session.add(content_ts)
+        db.session.commit()
+
 
 def scrape_bbc(url_bbc, keyword):
     result_bbc = requests.get(url_bbc)
@@ -61,11 +81,6 @@ def scrape_bbc(url_bbc, keyword):
         )
         db.session.add(content_bbc)
         db.session.commit()
-
-
-
-
-
 
 def recent_keywords():
     sql = text("SELECT DISTINCT source, keyword FROM scraped_data_all WHERE source='BBC'")
@@ -100,6 +115,7 @@ def search():
     elif check_keyword(keyword, recents) == False:
         time.sleep(random.randint(0, 3))
         scrape_dm('https://www.dailymail.co.uk/home/search.html?sel=site&searchPhrase=' + keyword, keyword)
+        scrape_ts('https://www.thesun.co.uk/?s=' + keyword, keyword)
         scrape_bbc('https://www.bbc.co.uk/search?q=' + keyword + '&filter=news', keyword)
     sql = text("SELECT title, link, keyword, source FROM scraped_data_all WHERE keyword='" + keyword + "'")
     execute = db.engine.execute(sql)
