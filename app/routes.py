@@ -50,7 +50,6 @@ def scrape_ts(url_ts, keyword):
     for article_ts in soup_ts.find_all('a', {'class': 'text-anchor-wrap'}):
         obj = {}
         url_ts = article_ts.attrs['href']
-        # url_ts_to_save = "https://www.dailymail.co.uk/" + url_ts
         title_location = article_ts.find('p')
         title_ts = title_location.getText()
 
@@ -121,7 +120,20 @@ def search():
     execute = db.engine.execute(sql)
     infos = [row for row in execute]
     # print(infos)
+    daily_mail_sources = cut_down(infos, "Daily Mail")
+    the_sun_sources = cut_down(infos, "The Sun")
+    bbc_sources = cut_down(infos, "BBC")
+    infos = daily_mail_sources + the_sun_sources + bbc_sources
+
     return render_template('index.html', infos=infos, recents=recents)
+
+
+def cut_down(results, source):
+    result_list = [result for result in results if result.source==source]
+    array = []
+    for i in range(3):
+        array.append(random.choice(result_list))
+    return array
 
 
 
