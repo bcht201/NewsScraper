@@ -38,7 +38,8 @@ def profile():
 @app.route('/settings', methods=['GET'])
 @login_required
 def settings():
-    return render_template('settings.html')
+    results = database.get_current_settings(current_user.id)
+    return render_template('settings.html', current_settings = results[0])
 
 
 @app.route('/search', methods=['POST'])

@@ -53,6 +53,11 @@ def db_update_settings(BBC, DM, TS, user_id):
     x.DM_quant = DM
     db.session.commit()
 
+def get_current_settings(user_id):
+    sql = text('SELECT BBC_quant, TS_quant, DM_quant FROM user WHERE id = ' + str(user_id))
+    execute = read_db(sql)
+    return [row for row in execute]
+
 def delete():
     sql = text("DELETE FROM scraped_data_all")
     execute = db.engine.execute(sql)

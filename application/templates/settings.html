@@ -6,6 +6,10 @@
 <br>
 <h1 class="title">{{current_user.name}}'s Account</h1>
 <br>
+<h3>Your current settings are:</h3>
+<h4>Desired BBC articles: {{ current_settings.BBC_quant }}</h4>
+<h4>Desired The Sun articles: {{ current_settings.TS_quant }}</h4>
+<h4>Desired Daily Mail articles: {{ current_settings.DM_quant }}</h4>
 <br>
 <form action="/settings_update" method="POST">
     <div class="field">
@@ -46,7 +50,7 @@
         <div class="control">
             <div class="select is-danger">
                 <h3>Number of The Sun articles desired:</h3>
-                <select name="TS">
+                <select name="BBC">
                     <option value="0">None</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
