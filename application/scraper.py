@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from application.models import scrapeData
 
-def scrape_web(keyword):
+def scrape_web(keyword, keyword_id):
     dm_url = 'https://www.dailymail.co.uk/home/search.html?sel=site&searchPhrase=' + keyword
     ts_url =  'https://www.thesun.co.uk/?s=' + keyword
     bbc_url = 'https://www.bbc.co.uk/search?q=' + keyword + '&filter=news'
@@ -20,12 +20,12 @@ def scrape_web(keyword):
     src = result.content
     soup_bbc = BeautifulSoup(src, "html.parser")
 
-    scrape_dm(dm_url, keyword, soup_dm)
-    scrape_ts(ts_url, keyword, soup_ts)
-    scrape_bbc(bbc_url, keyword, soup_bbc)
+    scrape_dm(dm_url, keyword_id, soup_dm)
+    scrape_ts(ts_url, keyword_id, soup_ts)
+    scrape_bbc(bbc_url, keyword_id, soup_bbc)
 
 
-def scrape_dm(url_dm, keyword, soup_dm):
+def scrape_dm(url_dm, keyword_id, soup_dm):
     for article_dm in soup_dm.find_all('h3', {'class': 'sch-res-title'}):
         obj = {}
         a_tag_dm = article_dm.find('a')
@@ -36,11 +36,11 @@ def scrape_dm(url_dm, keyword, soup_dm):
             title = title_dm,
             link = url_dm_to_save,
             source = "Daily Mail",
-            keyword = keyword
+            keyword = keyword_id
         )
         write_db(content_dm)
 
-def scrape_ts(url_ts, keyword, soup_ts):
+def scrape_ts(url_ts, keyword_id, soup_ts):
     for article_ts in soup_ts.find_all('a', {'class': 'text-anchor-wrap'}):
         obj = {}
         url_ts = article_ts.attrs['href']
@@ -50,12 +50,12 @@ def scrape_ts(url_ts, keyword, soup_ts):
             title = title_ts,
             link = url_ts,
             source = "The Sun",
-            keyword = keyword
+            keyword = keyword_id
         )
         write_db(content_ts)
 
 
-def scrape_bbc(url_bbc, keyword, soup_bbc):
+def scrape_bbc(url_bbc, keyword_id, soup_bbc):
     for article_bbc in soup_bbc.find_all("article"):
         obj = {}
         a_tag_bbc = article_bbc.find('a')
@@ -65,6 +65,6 @@ def scrape_bbc(url_bbc, keyword, soup_bbc):
             title = title_bbc,
             link = url_bbc,
             source = "BBC",
-            keyword = keyword
+            keyword = keyword_id
         )
         write_db(content_bbc)
