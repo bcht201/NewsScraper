@@ -1,3 +1,8 @@
+from application.database import write_db
+import requests
+from bs4 import BeautifulSoup
+from application.models import scrapeData
+
 def scrape_web(keyword):
     dm_url = 'https://www.dailymail.co.uk/home/search.html?sel=site&searchPhrase=' + keyword
     ts_url =  'https://www.thesun.co.uk/?s=' + keyword
@@ -20,37 +25,22 @@ def scrape_web(keyword):
     scrape_bbc(bbc_url, keyword, soup_bbc)
 
 
-
-       # scrape_dm( keyword)
-        # scrape_ts(, keyword)
-        # scrape_bbc(, keyword)
-
-
-
-
-
-
-def scrape_dm(url_dm, keyword):
-
+def scrape_dm(url_dm, keyword, soup_dm):
     for article_dm in soup_dm.find_all('h3', {'class': 'sch-res-title'}):
         obj = {}
         a_tag_dm = article_dm.find('a')
         url_dm = a_tag_dm.attrs['href']
         url_dm_to_save = "https://www.dailymail.co.uk/" + url_dm
         title_dm = a_tag_dm.getText()
-
         content_dm = scrapeData(
             title = title_dm,
             link = url_dm_to_save,
             source = "Daily Mail",
             keyword = keyword
         )
-        ** write to db like below **
-        db.session.add(content_dm)
-        db.session.commit()
+        write_db(content_dm)
 
-def scrape_ts(url_ts, keyword):
-
+def scrape_ts(url_ts, keyword, soup_ts):
     for article_ts in soup_ts.find_all('a', {'class': 'text-anchor-wrap'}):
         obj = {}
         url_ts = article_ts.attrs['href']
@@ -62,11 +52,10 @@ def scrape_ts(url_ts, keyword):
             source = "The Sun",
             keyword = keyword
         )
-        ** write to db **
+        write_db(content_ts)
 
 
-def scrape_bbc(url_bbc, keyword):
-
+def scrape_bbc(url_bbc, keyword, soup_bbc):
     for article_bbc in soup_bbc.find_all("article"):
         obj = {}
         a_tag_bbc = article_bbc.find('a')
@@ -78,4 +67,4 @@ def scrape_bbc(url_bbc, keyword):
             source = "BBC",
             keyword = keyword
         )
-        ** write to db **
+        write_db(content_bbc)

@@ -1,5 +1,5 @@
-from routes import db
-
+from application import db
+import datetime
 
 class scrapeData(db.Model):
     __tablename__ = "scraped_data_all"

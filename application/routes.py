@@ -1,18 +1,78 @@
 from application import app
 from flask import Flask, render_template, request, redirect, url_for
-from . import scraper
 import time
-import datetime
 import random
-# from app.db_classes.db_class import Data_Scrape
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text
-import requests
-from bs4 import BeautifulSoup
+from application import database
+from application import scraper
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 
-db = SQLAlchemy(app)
+def check_keyword(keyword, recents):
+    status = False
+    for term in recents:
+        if keyword == term.keyword:
+            status = True
+    return status
+
+def cut_down(results, source):
+    result_list = [result for result in results if result.source==source]
+    array = []
+    count = 0
+    while len(array) < 4:
+        array.append(result_list[count])
+        count += 1
+    return array
+
+@app.route('/', methods=['GET'])
+def index():
+    recents = database.recent_keywords()
+    return render_template('index.html', recents=recents)
+
+
+@app.route('/search', methods=['POST'])
+def search():
+    keyword = request.form['search']
+    recents = database.recent_keywords()
+    if keyword is None:
+        return redirect('/')
+    elif check_keyword(keyword, recents) == False:
+        time.sleep(random.randint(0, 3))
+        scraper.scrape_web( keyword )
+    infos = database.get_what_you_just_searched(keyword)
+    daily_mail_sources = cut_down(infos, "Daily Mail")
+    the_sun_sources = cut_down(infos, "The Sun")
+    bbc_sources = cut_down(infos, "BBC")
+    infos = daily_mail_sources + the_sun_sources + bbc_sources
+    return render_template('index.html', infos=infos, recents=recents)
+
+@app.route('/search_recent')
+def search_recent():
+    recents = database.recent_keywords()
+    keyword = request.args.get('term')
+    infos = database.get_what_you_just_searched(keyword)
+    daily_mail_sources = cut_down(infos, "Daily Mail")
+    the_sun_sources = cut_down(infos, "The Sun")
+    bbc_sources = cut_down(infos, "BBC")
+    infos = daily_mail_sources + the_sun_sources + bbc_sources
+    return render_template('index.html', infos=infos, recents=recents)
+
+
+@app.route('/delete')
+def delete():
+    database.delete()
+    return redirect('/')
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -72,79 +132,10 @@ db = SQLAlchemy(app)
 #         db.session.add(content_bbc)
 #         db.session.commit()
 
+
+
+
 # def recent_keywords():
 #     sql = text("SELECT DISTINCT source, keyword FROM scraped_data_all WHERE source='BBC'")
 #     execute = db.engine.execute(sql)
 #     return [row for row in execute]
-
-def check_keyword(keyword, recents):
-    status = False
-    for term in recents:
-        if keyword == term.keyword:
-            status = True
-    return status
-
-@app.route('/', methods=['GET'])
-def index():
-    recents = database.recent_keywords() # to be finished
-    return render_template('index.html', recents=recents)
-
-@app.route('/search', methods=['POST'])
-def search():
-    keyword = request.form['search']
-    recents = recent_keywords()
-    # print(recents)
-    # print(type(recents))
-    # print(recents[0])
-    # print(type(recents[0]))
-    # print(recents[0].keyword)
-    if keyword is None:
-        return redirect('/')
-    elif check_keyword(keyword, recents) == False:
-        time.sleep(random.randint(0, 3))
-        # scrape_dm('https://www.dailymail.co.uk/home/search.html?sel=site&searchPhrase=' + keyword, keyword)
-        # scrape_ts('https://www.thesun.co.uk/?s=' + keyword, keyword)
-        # scrape_bbc('https://www.bbc.co.uk/search?q=' + keyword + '&filter=news', keyword)
-        scraper.scrape_web( keyword )
-    # sql = text("SELECT title, link, keyword, source FROM scraped_data_all WHERE keyword='" + keyword + "'")
-    # execute = db.engine.execute(sql)
-    # infos = [row for row in execute]
-    # print(infos)
-    infos = database.get what you searched blah....
-    daily_mail_sources = cut_down(infos, "Daily Mail")
-    the_sun_sources = cut_down(infos, "The Sun")
-    bbc_sources = cut_down(infos, "BBC")
-    infos = daily_mail_sources + the_sun_sources + bbc_sources
-
-    return render_template('index.html', infos=infos, recents=recents)
-
-
-def cut_down(results, source):
-    result_list = [result for result in results if result.source==source]
-    array = []
-    count = 0
-    while len(array) < 4:
-        array.append(result_list[count])
-        count += 1
-    return array
-
-
-@app.route('/search_recent')
-def search_recent():
-    recents = request.args.get('term')
-    sql = text("SELECT title, link, keyword, source FROM scraped_data_all WHERE keyword='" + recents + "'")
-    execute = db.engine.execute(sql)
-    infos = [row for row in execute]
-    daily_mail_sources = cut_down(infos, "Daily Mail")
-    the_sun_sources = cut_down(infos, "The Sun")
-    bbc_sources = cut_down(infos, "BBC")
-    infos = daily_mail_sources + the_sun_sources + bbc_sources
-    return render_template('index.html', infos=infos)
-
-
-@app.route('/delete')
-def delete():
-    sql = text("DELETE FROM scraped_data_all")
-    execute = db.engine.execute(sql)
-    return redirect('/')
-
