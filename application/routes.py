@@ -58,13 +58,18 @@ def search():
     
     kw_id = database.write_user_keyword(keyword, current_user.id)
     infos = database.get_what_you_just_searched(kw_id)
+    print('infos before...:')
+    print(infos)
     if len(infos) == 0:
         return render_template('profile.html', error=1, recents=recents)
     else:
-        daily_mail_sources = cut_down(infos, "Daily Mail")
+        
+        # daily_mail_sources = cut_down(infos, "Daily Mail")
         the_sun_sources = cut_down(infos, "The Sun")
         bbc_sources = cut_down(infos, "BBC")
-        infos = daily_mail_sources + the_sun_sources + bbc_sources
+        infos = the_sun_sources + bbc_sources
+        print('infos after...:')
+        print(infos)
         return render_template('profile.html', infos=infos, recents=recents)
 
 @app.route('/search_recent')
