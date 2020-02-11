@@ -20,20 +20,20 @@ def cut_down(results, source):
     result_list = [result for result in results if result.source==source]
     array = []
     count = 0
-    while len(array) < 4:
+    while len(array) < 2:
         array.append(result_list[count])
         count += 1
     return array
 
 @app.route('/', )
 def index():
-    return render_template('index.html')
+    return render_template('index.html', user=current_user)
 
 @app.route('/profile', methods=['GET'])
 @login_required
 def profile():
-    recents = database.recent_keywords()
-    return render_template('profile.html', recents=recents)
+    recents = database.recent_keywords(str(current_user.id))
+    return render_template('profile.html', recents=recents, user=current_user)
 
 @app.route('/settings', methods=['GET'])
 @login_required
@@ -45,13 +45,17 @@ def settings():
 @login_required
 def search():
     keyword = request.form['search']
-    recents = database.recent_keywords()
+    recents = database.recent_keywords(str(current_user.id))
+    # key_id = database.write_user_keyword(keyword, current_user.id)
     if keyword is None:
         return redirect('/')
-    elif check_keyword(keyword, recents) == False:
+    elif not database.db_check_keyword(keyword):
+        database.write_keyword(keyword)
+        key_id = database.write_user_keyword(keyword, current_user.id)
         time.sleep(random.randint(0, 3))
-        scraper.scrape_web( keyword )
-    infos = database.get_what_you_just_searched(keyword)
+        scraper.scrape_web(keyword, key_id)
+    kw_id = database.get_keyword_id(keyword)
+    infos = database.get_what_you_just_searched(str(kw_id[0].id))
     daily_mail_sources = cut_down(infos, "Daily Mail")
     the_sun_sources = cut_down(infos, "The Sun")
     bbc_sources = cut_down(infos, "BBC")
@@ -61,9 +65,10 @@ def search():
 @app.route('/search_recent')
 @login_required
 def search_recent():
-    recents = database.recent_keywords()
+    recents = database.recent_keywords(str(current_user.id))
     keyword = request.args.get('term')
-    infos = database.get_what_you_just_searched(keyword)
+    key_id = database.write_user_keyword(keyword, current_user.id)
+    infos = database.get_what_you_just_searched(str(key_id))
     daily_mail_sources = cut_down(infos, "Daily Mail")
     the_sun_sources = cut_down(infos, "The Sun")
     bbc_sources = cut_down(infos, "BBC")

@@ -1,5 +1,6 @@
 from sqlalchemy import text
 from application import db
+from application.models import Keyword, User_Search
 
 
 def read_db(sql):
@@ -9,16 +10,43 @@ def write_db(content):
     db.session.add(content)
     db.session.commit()
 
-def recent_keywords():
-    sql = text("SELECT DISTINCT source, keyword FROM scraped_data_all WHERE source='BBC'")
-    results = read_db(sql)
-    return [row for row in results]
+def db_check_keyword(keyword):
+    sql = text("SELECT id, keyword FROM keyword WHERE keyword='" + keyword + "'")
+    execute = read_db(sql)
+    return [row for row in execute]
 
-def get_what_you_just_searched(keyword):
-    sql = text("SELECT title, link, keyword, source FROM scraped_data_all WHERE keyword='" + keyword + "'")
+def write_keyword(keyword):
+    obj = Keyword(
+        keyword = keyword
+    )
+    write_db(obj)
+
+def write_user_keyword(keyword, user_id):
+    keyword_and_id = db_check_keyword(keyword)
+    obj = User_Search(
+        user_id = user_id,
+        keyword_id = keyword_and_id[0].id
+    )
+    write_db(obj)
+    return keyword_and_id[0].id
+    
+
+def get_keyword_id(keyword):
+    sql = text("SELECT id FROM keyword WHERE keyword='" + keyword + "'")
+    execute = read_db(sql)
+    return [row for row in execute]
+
+def recent_keywords(user_id):
+    sql = text("SELECT DISTINCT user_search.id, keyword.keyword FROM user_search JOIN keyword ON user_search.keyword_id = keyword.id WHERE user_search.user_id = " + user_id)
+    execute = read_db(sql)
+    return [row for row in execute]
+
+def get_what_you_just_searched(key_id):
+    sql = text("SELECT title, link, keyword, source FROM scraped_data_all WHERE keyword=" + key_id)
     execute = read_db(sql)
     return [row for row in execute]
 
 def delete():
     sql = text("DELETE FROM scraped_data_all")
     execute = db.engine.execute(sql)
+
