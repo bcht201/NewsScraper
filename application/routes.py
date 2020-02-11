@@ -1,11 +1,13 @@
 from application import app
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, Blueprint
 import time
 import random
 from flask_sqlalchemy import SQLAlchemy
 from application import database
 from application import scraper
+from flask_login import login_required, current_user
 
+routes = Blueprint("routes", __name__)
 
 def check_keyword(keyword, recents):
     status = False
@@ -23,13 +25,24 @@ def cut_down(results, source):
         count += 1
     return array
 
-@app.route('/', methods=['GET'])
+@app.route('/', )
 def index():
+    return render_template('index.html')
+
+@app.route('/profile', methods=['GET'])
+@login_required
+def profile():
     recents = database.recent_keywords()
-    return render_template('index.html', recents=recents)
+    return render_template('profile.html', recents=recents)
+
+@app.route('/settings', methods=['GET'])
+@login_required
+def settings():
+    return render_template('settings.html')
 
 
 @app.route('/search', methods=['POST'])
+@login_required
 def search():
     keyword = request.form['search']
     recents = database.recent_keywords()
@@ -43,9 +56,10 @@ def search():
     the_sun_sources = cut_down(infos, "The Sun")
     bbc_sources = cut_down(infos, "BBC")
     infos = daily_mail_sources + the_sun_sources + bbc_sources
-    return render_template('index.html', infos=infos, recents=recents)
+    return render_template('profile.html', infos=infos, recents=recents)
 
 @app.route('/search_recent')
+@login_required
 def search_recent():
     recents = database.recent_keywords()
     keyword = request.args.get('term')
@@ -54,7 +68,7 @@ def search_recent():
     the_sun_sources = cut_down(infos, "The Sun")
     bbc_sources = cut_down(infos, "BBC")
     infos = daily_mail_sources + the_sun_sources + bbc_sources
-    return render_template('index.html', infos=infos, recents=recents)
+    return render_template('profile.html', infos=infos, recents=recents)
 
 
 @app.route('/delete')
