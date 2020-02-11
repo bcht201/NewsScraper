@@ -35,7 +35,7 @@ def signup_post():
     if user:
         flash('Email address already exists.')
         return redirect(url_for('auth.signup'))
-    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
+    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'), BBC_quant = 3, DM_quant = 3, TS_quant = 3)
     db.session.add(new_user)
     db.session.commit()
     return redirect(url_for('auth.login'))

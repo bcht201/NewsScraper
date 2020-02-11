@@ -54,27 +54,39 @@ def search():
         key_id = database.write_user_keyword(keyword, current_user.id)
         time.sleep(random.randint(0, 3))
         scraper.scrape_web(keyword, key_id)
-    kw_id = database.get_keyword_id(keyword)
-    infos = database.get_what_you_just_searched(str(kw_id[0].id))
-    daily_mail_sources = cut_down(infos, "Daily Mail")
-    the_sun_sources = cut_down(infos, "The Sun")
-    bbc_sources = cut_down(infos, "BBC")
-    infos = daily_mail_sources + the_sun_sources + bbc_sources
-    return render_template('profile.html', infos=infos, recents=recents)
+    
+    kw_id = database.write_user_keyword(keyword, current_user.id)
+    infos = database.get_what_you_just_searched(kw_id)
+    if len(infos) == 0:
+        return render_template('profile.html', error=1, recents=recents)
+    else:
+        daily_mail_sources = cut_down(infos, "Daily Mail")
+        the_sun_sources = cut_down(infos, "The Sun")
+        bbc_sources = cut_down(infos, "BBC")
+        infos = daily_mail_sources + the_sun_sources + bbc_sources
+        return render_template('profile.html', infos=infos, recents=recents)
 
 @app.route('/search_recent')
 @login_required
 def search_recent():
     recents = database.recent_keywords(str(current_user.id))
     keyword = request.args.get('term')
-    key_id = database.write_user_keyword(keyword, current_user.id)
-    infos = database.get_what_you_just_searched(str(key_id))
+    key_id = database.get_keyword_id(keyword)
+    infos = database.get_what_you_just_searched(str(key_id[0].id))
     daily_mail_sources = cut_down(infos, "Daily Mail")
     the_sun_sources = cut_down(infos, "The Sun")
     bbc_sources = cut_down(infos, "BBC")
     infos = daily_mail_sources + the_sun_sources + bbc_sources
     return render_template('profile.html', infos=infos, recents=recents)
 
+@app.route('/settings_update', methods=['POST'])
+def update_settings():
+    recents = database.recent_keywords(str(current_user.id))
+    BBC = request.form.get("BBC")
+    DM = request.form.get("DM")
+    TS = request.form.get("TS")
+    database.db_update_settings(BBC, DM, TS, current_user.id)
+    return render_template('profile.html', recents=recents, updated=1)
 
 @app.route('/delete')
 def delete():

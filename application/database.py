@@ -1,6 +1,6 @@
 from sqlalchemy import text
 from application import db
-from application.models import Keyword, User_Search
+from application.models import Keyword, User_Search, User
 
 
 def read_db(sql):
@@ -42,9 +42,16 @@ def recent_keywords(user_id):
     return [row for row in execute]
 
 def get_what_you_just_searched(key_id):
-    sql = text("SELECT title, link, keyword, source FROM scraped_data_all WHERE keyword=" + key_id)
+    sql = text("SELECT title, link, keyword, source FROM scraped_data_all WHERE keyword=" + str(key_id))
     execute = read_db(sql)
     return [row for row in execute]
+
+def db_update_settings(BBC, DM, TS, user_id):
+    x = db.session.query(User).get(user_id)
+    x.BBC_quant = BBC
+    x.TS_quant = TS
+    x.DM_quant = DM
+    db.session.commit()
 
 def delete():
     sql = text("DELETE FROM scraped_data_all")

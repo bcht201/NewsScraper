@@ -22,6 +22,9 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(100))
+    BBC_quant = db.Column(db.Integer)
+    TS_quant = db.Column(db.Integer)
+    DM_quant = db.Column(db.Integer)
 
 class User_Search(db.Model):
     __tablename__ = "user_search"

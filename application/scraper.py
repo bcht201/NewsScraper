@@ -26,19 +26,22 @@ def scrape_web(keyword, keyword_id):
 
 
 def scrape_dm(url_dm, keyword_id, soup_dm):
+    results = []
     for article_dm in soup_dm.find_all('h3', {'class': 'sch-res-title'}):
         obj = {}
         a_tag_dm = article_dm.find('a')
         url_dm = a_tag_dm.attrs['href']
         url_dm_to_save = "https://www.dailymail.co.uk/" + url_dm
         title_dm = a_tag_dm.getText()
-        content_dm = scrapeData(
-            title = title_dm,
-            link = url_dm_to_save,
-            source = "Daily Mail",
-            keyword = keyword_id
-        )
-        write_db(content_dm)
+        if(title_dm is not None and url_dm is not None):
+            content_dm = scrapeData(
+                title = title_dm,
+                link = url_dm_to_save,
+                source = "Daily Mail",
+                keyword = keyword_id
+            )
+            # write_db(content_dm)
+            results.append(content_dm)
 
 def scrape_ts(url_ts, keyword_id, soup_ts):
     for article_ts in soup_ts.find_all('a', {'class': 'text-anchor-wrap'}):
