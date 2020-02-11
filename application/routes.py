@@ -47,7 +47,6 @@ def settings():
 def search():
     keyword = request.form['search']
     recents = database.recent_keywords(str(current_user.id))
-    # key_id = database.write_user_keyword(keyword, current_user.id)
     if keyword is None:
         return redirect('/')
     elif not database.db_check_keyword(keyword):
@@ -63,11 +62,10 @@ def search():
     if len(infos) == 0:
         return render_template('profile.html', error=1, recents=recents)
     else:
-        
-        # daily_mail_sources = cut_down(infos, "Daily Mail")
+        daily_mail_sources = cut_down(infos, "Daily Mail")
         the_sun_sources = cut_down(infos, "The Sun")
         bbc_sources = cut_down(infos, "BBC")
-        infos = the_sun_sources + bbc_sources
+        infos = daily_mail_sources + the_sun_sources + bbc_sources
         print('infos after...:')
         print(infos)
         return render_template('profile.html', infos=infos, recents=recents)

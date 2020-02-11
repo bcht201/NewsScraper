@@ -26,7 +26,6 @@ def scrape_web(keyword, keyword_id):
 
 
 def scrape_dm(url_dm, keyword_id, soup_dm):
-    results = []
     for article_dm in soup_dm.find_all('h3', {'class': 'sch-res-title'}):
         obj = {}
         a_tag_dm = article_dm.find('a')
@@ -40,8 +39,7 @@ def scrape_dm(url_dm, keyword_id, soup_dm):
                 source = "Daily Mail",
                 keyword = keyword_id
             )
-            # write_db(content_dm)
-            results.append(content_dm)
+            write_db(content_dm)
 
 def scrape_ts(url_ts, keyword_id, soup_ts):
     for article_ts in soup_ts.find_all('a', {'class': 'text-anchor-wrap'}):

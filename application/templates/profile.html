@@ -2,7 +2,7 @@
 
 {% block body %}
     <div class="container is-fluid">
-        <div class="notification">
+        <div >
             <h1>News Dashboard</h1>
             {% if updated %}
             <h1>Well done, your settings have been updated!</h1>
@@ -13,7 +13,7 @@
                     <input type="submit" class="button is-danger is-outlined is-rounded" value="Search!"> 
                 </form>
             </div>
-            <p>{{current_user.name}}</p>
+            <p>Welcome, {{current_user.name}}!!!</p>
             {% if error %}
             <h1>NO RESULTS, YOU SUCK</h1>
             {% endif %}
