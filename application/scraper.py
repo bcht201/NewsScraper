@@ -43,7 +43,6 @@ def scrape_dm(url_dm, keyword_id, soup_dm):
                 keyword = keyword_id
             )
             array.append(content_dm)
-        print(len(array))
     return array
 
 def scrape_ts(url_ts, keyword_id, soup_ts):
@@ -60,7 +59,6 @@ def scrape_ts(url_ts, keyword_id, soup_ts):
                 keyword = keyword_id
             )
             array.append(content_ts)
-        print(len(array))
     return array
 
 
@@ -78,5 +76,4 @@ def scrape_bbc(url_bbc, keyword_id, soup_bbc):
                 keyword = keyword_id
             )
             array.append(content_bbc)
-        print(len(array))
     return array

@@ -71,8 +71,3 @@ def check_user(email):
 def get_current_settings(user_id):
     sql = text('SELECT BBC_quant, TS_quant, DM_quant FROM user WHERE id = ' + str(user_id))
     return read_db(sql)
-
-def delete():
-    sql = text("DELETE FROM scraped_data_all")
-    execute = db.engine.execute(sql)
-

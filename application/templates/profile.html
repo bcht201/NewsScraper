@@ -3,19 +3,21 @@
 {% block body %}
     <div class="container is-fluid">
         <div >
-            <h1>News Dashboard</h1>
+            <h1 class="newsdashboard">News Dashboard</h1>
+            <p class="title has-text-danger is-2">Welcome, {{current_user.name}}!!!</p>
             {% if updated %}
             <h1>Well done, your settings have been updated!</h1>
             {% endif %}
             <div class="field">
                 <form action="/search" method="POST">
                     <input type="text" id="searchbar" class="input is-large is-danger is-rounded" name="search" placeholder="Search for your news articles here!" required>
-                    <input type="submit" class="button is-danger is-outlined is-rounded" value="Search!"> 
+                    <br>
+                    <br>
+                    <input type="submit" class="button is-large is-danger is-outlined is-rounded" value="Search!"> 
                 </form>
             </div>
-            <p>Welcome, {{current_user.name}}!!!</p>
             {% if error %}
-            <h1>NO RESULTS, YOU SUCK</h1>
+            <h1>No Results with this search, please search something else.</h1>
             {% endif %}
             <div>
                 {% if infos %}
@@ -32,6 +34,7 @@
                     {% endfor %}
                 </table>
                 {% endif %}
+                
             </div>
             <div>
                 <table class="table">
