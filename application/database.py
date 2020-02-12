@@ -1,5 +1,6 @@
 from sqlalchemy import text
 from application import db
+from werkzeug.security import generate_password_hash, check_password_hash
 from application.models import Keyword, User_Search, User
 
 
@@ -52,6 +53,17 @@ def db_update_settings(BBC, DM, TS, user_id):
     x.DM_quant = DM
     db.session.commit()
 
+def new_user(email, name, password):
+        sign_up_details = User(
+            email=email,
+            name=name,
+            password=generate_password_hash(password,method='sha256'),
+            BBC_quant = 3,
+            DM_quant = 3,
+            TS_quant = 3
+        )
+        write_db(sign_up_details)
+
 def check_user(email):
     sql = text("SELECT * FROM user WHERE email='" + email + "'")
     return read_db(sql)
@@ -59,8 +71,3 @@ def check_user(email):
 def get_current_settings(user_id):
     sql = text('SELECT BBC_quant, TS_quant, DM_quant FROM user WHERE id = ' + str(user_id))
     return read_db(sql)
-
-def delete():
-    sql = text("DELETE FROM scraped_data_all")
-    execute = db.engine.execute(sql)
-

@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required
 from application.models import User
 from application import db
+from application.database import check_user, new_user
 
 auth = Blueprint('auth', __name__)
 
@@ -16,9 +17,10 @@ def login_post():
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
     user = User.query.filter_by(email=email).first()
-    if not user and not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
-        return redirect(url_for('auth.login'))
+    # user = check_user(email)
+    if not user or not check_password_hash(user.password, password):
+        error = 'Please check your login details and try again.'
+        return render_template('login.html', error=error)
     login_user(user, remember=remember)
     return redirect(url_for('profile'))
 
@@ -32,12 +34,12 @@ def signup_post():
     name = request.form.get('name')
     password = request.form.get('password')
     user = User.query.filter_by(email=email).first()
+    # user = check_user(email)
     if user:
         flash('Email address already exists.')
         return redirect(url_for('auth.signup'))
-    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'), BBC_quant = 3, DM_quant = 3, TS_quant = 3)
-    db.session.add(new_user)
-    db.session.commit()
+    else:
+        new_user(email, name, password)
     return redirect(url_for('auth.login'))
 
 @auth.route('/logout')
