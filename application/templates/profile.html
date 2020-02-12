@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="container is-fluid">
+        <div >
+            <h1>News Dashboard</h1>
+            {% if updated %}
+            <h1>Well done, your settings have been updated!</h1>
+            {% endif %}
+            <div class="field">
+                <form action="/search" method="POST">
+                    <input type="text" id="searchbar" class="input is-large is-danger is-rounded" name="search" placeholder="Search for your news articles here!" required>
+                    <input type="submit" class="button is-danger is-outlined is-rounded" value="Search!"> 
+                </form>
+            </div>
+            <p>Welcome, {{current_user.name}}!!!</p>
+            {% if error %}
+            <h1>NO RESULTS, YOU SUCK</h1>
+            {% endif %}
+            <div>
+                {% if infos %}
+                <table class="table is-striped">
+                    <tr>
+                        <th>Article Titles</th>
+                        <th>Source</th>
+                    </tr>
+                    {% for info in infos %}
+                    <tr>
+                        <td><a href={{info.link}} target="_blank">{{info.title}}</a></td>
+                        <td>{{info.source}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% endif %}
+            </div>
+            <div>
+                <table class="table">
+                    <tr>
+                        <th>Your recent searches</th>
+                    </tr>
+                    {% for recent in recents %}
+                    <tr>
+                        <td><a href="/search_recent?term={{recent.keyword}}">{{recent.keyword}}</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+  
+{% endblock %}
