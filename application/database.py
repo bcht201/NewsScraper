@@ -34,7 +34,6 @@ def write_user_keyword(keyword, user_id):
     )
     write_db(obj)
     
-
 def get_keyword_id(keyword):
     sql = text("SELECT id FROM keyword WHERE keyword='" + keyword + "'")
     execute = read_db(sql)

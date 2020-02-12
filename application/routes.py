@@ -10,37 +10,6 @@ from application.helper_functions import check_keyword, cut_down, batch_write, e
 
 routes = Blueprint("routes", __name__)
 
-# def check_keyword(keyword, recents):
-#     status = False
-#     for term in recents:
-#         if keyword == term.keyword:
-#             status = True
-#     return status
-
-# def cut_down(results, source):
-#     result_list = [result for result in results if result.source==source]
-#     array = []
-#     count = 0
-#     while len(array) < 2:
-#         array.append(result_list[count])
-#         count += 1
-#     return array
-
-# def batch_write(search_results):
-#     for source in search_results:
-#         for article in source:
-#             database.write_db(article)
-
-# def empty_results(results):
-#     blank = 0
-#     for source in results:
-#         if len(source) == 0:
-#             blank += 1
-#     if blank == 3:
-#         return True
-#     else:
-#         return False
-
 @app.route('/', )
 def index():
     return render_template('index.html', user=current_user)
@@ -56,8 +25,6 @@ def profile():
 def settings():
     results = database.get_current_settings(current_user.id)
     return render_template('settings.html', current_settings = results[0])
-
-
 
 @app.route('/search', methods=['POST'])
 @login_required
@@ -83,13 +50,35 @@ def search():
             database.write_keyword(keyword)
             database.write_user_keyword(keyword, current_user.id)
             batch_write(search_results)
-            infos = database.get_what_you_just_searched(next_key_id)
+            information = database.get_what_you_just_searched(next_key_id)
+            current_settings = database.get_current_settings(current_user.id)
+
+            bbc_setting = current_settings[0].BBC_quant
+            print(bbc_setting)
+            ts_setting = current_settings[0].TS_quant
+            dm_setting = current_settings[0].DM_quant
+            bbc_sources = cut_down(information, "BBC", bbc_setting)
+            the_sun_sources = cut_down(information, "The Sun", ts_setting)
+            daily_mail_sources = cut_down(information, "Daily Mail", dm_setting)
+            infos = daily_mail_sources + the_sun_sources + bbc_sources
+
             return render_template('profile.html', infos=infos, recents=recents)
             
     else:
         id_search = database.get_keyword_id(keyword)
         kw_id = id_search[0].id
-        infos = database.get_what_you_just_searched(kw_id)
+        
+        information = database.get_what_you_just_searched(kw_id)
+        current_settings = database.get_current_settings(current_user.id)
+        bbc_setting = current_settings[0].BBC_quant
+        print(bbc_setting)
+        ts_setting = current_settings[0].TS_quant
+        dm_setting = current_settings[0].DM_quant
+        bbc_sources = cut_down(information, "BBC", bbc_setting)
+        the_sun_sources = cut_down(information, "The Sun", ts_setting)
+        daily_mail_sources = cut_down(information, "Daily Mail", dm_setting)
+        infos = daily_mail_sources + the_sun_sources + bbc_sources
+
         return render_template('profile.html', infos=infos, recents=recents)
 
 @app.route('/search_recent')
@@ -99,10 +88,17 @@ def search_recent():
     keyword = request.args.get('term')
     key_id = database.get_keyword_id(keyword)
     infos = database.get_what_you_just_searched(str(key_id[0].id))
-    daily_mail_sources = cut_down(infos, "Daily Mail")
-    the_sun_sources = cut_down(infos, "The Sun")
-    bbc_sources = cut_down(infos, "BBC")
+
+    current_settings = database.get_current_settings(current_user.id)
+    bbc_setting = current_settings[0].BBC_quant
+    print(bbc_setting)
+    ts_setting = current_settings[0].TS_quant
+    dm_setting = current_settings[0].DM_quant
+    bbc_sources = cut_down(infos, "BBC", bbc_setting)
+    the_sun_sources = cut_down(infos, "The Sun", ts_setting)
+    daily_mail_sources = cut_down(infos, "Daily Mail", dm_setting)
     infos = daily_mail_sources + the_sun_sources + bbc_sources
+
     return render_template('profile.html', infos=infos, recents=recents)
 
 @app.route('/settings_update', methods=['POST'])

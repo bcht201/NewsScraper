@@ -1,4 +1,4 @@
-from application.database import write_db
+from application.database import write_db, get_current_settings
 
 def check_keyword(keyword, recents):
     status = False
@@ -7,11 +7,11 @@ def check_keyword(keyword, recents):
             status = True
     return status
 
-def cut_down(results, source):
+def cut_down(results, source, settings):
     result_list = [result for result in results if result.source==source]
     array = []
     count = 0
-    while len(array) < 2:
+    while len(array) < settings and count < len(result_list):
         array.append(result_list[count])
         count += 1
     return array
