@@ -28,4 +28,5 @@ from . import routes
 from . import scraper
 from . import database
 from . import models
+from . import test_route
 from application import app
