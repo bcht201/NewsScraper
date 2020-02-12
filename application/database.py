@@ -1,6 +1,6 @@
 from sqlalchemy import text
 from application import db
-from application.models import Keyword, User_Search
+from application.models import Keyword, User_Search, User
 
 
 def read_db(sql):
@@ -21,6 +21,11 @@ def write_keyword(keyword):
     )
     write_db(obj)
 
+def get_next_kw_id():
+    sql = text("SELECT id FROM keyword ORDER BY id DESC")
+    execute = read_db(sql)
+    return [row for row in execute]
+
 def write_user_keyword(keyword, user_id):
     keyword_and_id = db_check_keyword(keyword)
     obj = User_Search(
@@ -28,7 +33,6 @@ def write_user_keyword(keyword, user_id):
         keyword_id = keyword_and_id[0].id
     )
     write_db(obj)
-    return keyword_and_id[0].id
     
 
 def get_keyword_id(keyword):
@@ -42,7 +46,19 @@ def recent_keywords(user_id):
     return [row for row in execute]
 
 def get_what_you_just_searched(key_id):
-    sql = text("SELECT title, link, keyword, source FROM scraped_data_all WHERE keyword=" + key_id)
+    sql = text("SELECT title, link, keyword, source FROM scraped_data_all WHERE keyword=" + str(key_id))
+    execute = read_db(sql)
+    return [row for row in execute]
+
+def db_update_settings(BBC, DM, TS, user_id):
+    x = db.session.query(User).get(user_id)
+    x.BBC_quant = BBC
+    x.TS_quant = TS
+    x.DM_quant = DM
+    db.session.commit()
+
+def get_current_settings(user_id):
+    sql = text('SELECT BBC_quant, TS_quant, DM_quant FROM user WHERE id = ' + str(user_id))
     execute = read_db(sql)
     return [row for row in execute]
 
