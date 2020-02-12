@@ -2,90 +2,93 @@
 
 {% block body %}
 <div class="master">
-<div>
-    <h1 class="title has-text-danger">This is the settings page!</h1>
-    <h1 class="title has-text-danger">{{current_user.name}}'s Account</h1>
-    <br>
-    <br>
-    <br>
-</div>
-<div class="settings">
-    <div class="table_settings">
-        {% if current_settings %}
-        <h2 class="title has-text-danger is-3">Your current settings are:</h2>
-        <div class="table_container">
-            <table class="table">
-                <tr>
-                    <th>Source</th>
-                    <th>Quantity</th>
-                </tr>
-                <tr>
-                    <td>BBC</td>
-                    <td>{{ current_settings.BBC_quant }}</td>
-                </tr>
-                <tr>
-                    <td>Daily Mail</td>
-                    <td>{{ current_settings.DM_quant }}</td>
-                </tr>
-                <tr>
-                    <td>The Sun</td>
-                    <td>{{ current_settings.TS_quant }}</td>
-                </tr>
-            </table>
-        </div>
+    <div>
+        <h1 class="title has-text-link">This is the settings page!</h1>
+        <h1 class="title has-text-link">{{current_user.name}}'s Account</h1>
+        <br>
+        <br>
+        {% if updated %}
+        <h1 class="title is-1 has-text-danger">Well done, your settings have been updated!</h1>
         {% endif %}
         <br>
     </div>
-    <div class="dropdowns">
-        <form action="/settings_update" method="POST">
-            <div class="selections_container">
-                <div class="bbc_drop">
-                    <h3 class="has-text-danger">BBC articles desired:</h3>
-                    <div class="select is-danger">
-                        <select name="BBC">
-                            <option>Select dropdown</option>
-                            <option value="0">None</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="dm_drop">
-                    <h3 class="has-text-danger">Daily Mail articles desired:</h3>
-                    <div class="select is-danger">
-                        <select name="DM">
-                            <option>Select dropdown</option>
-                            <option value="0">None</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="ts_drop">
-                    <h3 class="has-text-danger">The Sun articles desired:</h3>
-                    <div class="select is-danger">
-                        <select name="TS">
-                            <option>Select dropdown</option>
-                            <option value="0">None</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-                </div>
+    <div class="settings">
+        <div class="table_settings">
+            {% if current_settings %}
+            <h2 class="title has-text-danger is-3">Your current settings are:</h2>
+            <div class="table_container">
+                <table class="table">
+                    <tr>
+                        <th>Source</th>
+                        <th>Quantity</th>
+                    </tr>
+                    <tr>
+                        <td>BBC</td>
+                        <td>{{ current_settings.BBC_quant }}</td>
+                    </tr>
+                    <tr>
+                        <td>Daily Mail</td>
+                        <td>{{ current_settings.DM_quant }}</td>
+                    </tr>
+                    <tr>
+                        <td>The Sun</td>
+                        <td>{{ current_settings.TS_quant }}</td>
+                    </tr>
+                </table>
             </div>
-            <input type="submit" class="button is-danger is-outlined is-rounded" value="Confirm changes"> 
-        </form>
+            {% endif %}
+            <br>
+        </div>
+        <div class="dropdowns">
+            <form action="/settings_update" method="POST">
+                <div class="selections_container">
+                    <div class="bbc_drop">
+                        <h3 class="has-text-danger">BBC articles desired:</h3>
+                        <div class="select is-danger">
+                            <select name="BBC">
+                                <option>Select dropdown</option>
+                                <option value="0">None</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="dm_drop">
+                        <h3 class="has-text-danger">Daily Mail articles desired:</h3>
+                        <div class="select is-danger">
+                            <select name="DM">
+                                <option>Select dropdown</option>
+                                <option value="0">None</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="ts_drop">
+                        <h3 class="has-text-danger">The Sun articles desired:</h3>
+                        <div class="select is-danger">
+                            <select name="TS">
+                                <option>Select dropdown</option>
+                                <option value="0">None</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" class="button is-danger is-outlined is-rounded" value="Confirm changes"> 
+            </form>
+        </div>
     </div>
-</div>
 </div>
 
   

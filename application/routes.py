@@ -95,4 +95,5 @@ def update_settings():
     DM = request.form.get("DM")
     TS = request.form.get("TS")
     database.db_update_settings(BBC, DM, TS, current_user.id)
-    return render_template('profile.html', recents=recents, updated=1)
+    current_settings = database.get_current_settings(current_user.id)
+    return render_template('settings.html', current_settings=current_settings[0], updated=1)
