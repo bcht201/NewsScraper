@@ -54,7 +54,6 @@ def search():
             current_settings = database.get_current_settings(current_user.id)
 
             bbc_setting = current_settings[0].BBC_quant
-            print(bbc_setting)
             ts_setting = current_settings[0].TS_quant
             dm_setting = current_settings[0].DM_quant
             bbc_sources = cut_down(information, "BBC", bbc_setting)
@@ -71,7 +70,6 @@ def search():
         information = database.get_what_you_just_searched(kw_id)
         current_settings = database.get_current_settings(current_user.id)
         bbc_setting = current_settings[0].BBC_quant
-        print(bbc_setting)
         ts_setting = current_settings[0].TS_quant
         dm_setting = current_settings[0].DM_quant
         bbc_sources = cut_down(information, "BBC", bbc_setting)
@@ -91,7 +89,6 @@ def search_recent():
 
     current_settings = database.get_current_settings(current_user.id)
     bbc_setting = current_settings[0].BBC_quant
-    print(bbc_setting)
     ts_setting = current_settings[0].TS_quant
     dm_setting = current_settings[0].DM_quant
     bbc_sources = cut_down(infos, "BBC", bbc_setting)
