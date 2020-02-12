@@ -21,6 +21,11 @@ def write_keyword(keyword):
     )
     write_db(obj)
 
+def get_next_kw_id():
+    sql = text("SELECT id FROM keyword ORDER BY id DESC")
+    execute = read_db(sql)
+    return [row for row in execute]
+
 def write_user_keyword(keyword, user_id):
     keyword_and_id = db_check_keyword(keyword)
     obj = User_Search(
@@ -28,7 +33,6 @@ def write_user_keyword(keyword, user_id):
         keyword_id = keyword_and_id[0].id
     )
     write_db(obj)
-    return keyword_and_id[0].id
     
 
 def get_keyword_id(keyword):

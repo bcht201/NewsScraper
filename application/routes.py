@@ -25,6 +25,21 @@ def cut_down(results, source):
         count += 1
     return array
 
+def batch_write(search_results):
+    for source in search_results:
+        for article in source:
+            database.write_db(article)
+
+def empty_results(results):
+    blank = 0
+    for source in results:
+        if len(source) == 0:
+            blank += 1
+    if blank == 3:
+        return True
+    else:
+        return False
+
 @app.route('/', )
 def index():
     return render_template('index.html', user=current_user)
@@ -42,32 +57,38 @@ def settings():
     return render_template('settings.html', current_settings = results[0])
 
 
+
 @app.route('/search', methods=['POST'])
 @login_required
 def search():
+    next_key_id = 0
     keyword = request.form['search']
     recents = database.recent_keywords(str(current_user.id))
-    if keyword is None:
-        return redirect('/')
-    elif not database.db_check_keyword(keyword):
-        database.write_keyword(keyword)
-        key_id = database.write_user_keyword(keyword, current_user.id)
-        time.sleep(random.randint(0, 3))
-        scraper.scrape_web(keyword, key_id)
-    
-    kw_id = database.write_user_keyword(keyword, current_user.id)
-    infos = database.get_what_you_just_searched(kw_id)
-    print('infos before...:')
-    print(infos)
-    if len(infos) == 0:
-        return render_template('profile.html', error=1, recents=recents)
+    result = database.get_next_kw_id()
+
+    if len(result) == 0:
+        next_key_id = 1
     else:
-        daily_mail_sources = cut_down(infos, "Daily Mail")
-        the_sun_sources = cut_down(infos, "The Sun")
-        bbc_sources = cut_down(infos, "BBC")
-        infos = daily_mail_sources + the_sun_sources + bbc_sources
-        print('infos after...:')
-        print(infos)
+        next_key_id = result[0].id + 1
+
+    if not database.db_check_keyword(keyword):
+        time.sleep(random.randint(0, 3))
+        search_results = scraper.scrape_web(keyword, next_key_id)
+
+
+        if empty_results(search_results):
+            return render_template('profile.html', error=1, recents=recents)
+        else:
+            database.write_keyword(keyword)
+            database.write_user_keyword(keyword, current_user.id)
+            batch_write(search_results)
+            infos = database.get_what_you_just_searched(next_key_id)
+            return render_template('profile.html', infos=infos, recents=recents)
+            
+    else:
+        id_search = database.get_keyword_id(keyword)
+        kw_id = id_search[0].id
+        infos = database.get_what_you_just_searched(kw_id)
         return render_template('profile.html', infos=infos, recents=recents)
 
 @app.route('/search_recent')
