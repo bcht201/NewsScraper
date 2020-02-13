@@ -79,4 +79,5 @@
 - Limit recents table to last 10 searches or similiar
 
 ## Database Architecture
-
+![Github logo](db_diagram.png) <br>
+Database Structure
