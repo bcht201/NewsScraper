@@ -81,3 +81,6 @@
 ## Database Architecture
 ![Github logo](db_diagram.png) <br>
 Database Structure
+
+![Github logo](dependancies.jpg) <br>
+Dependancies Flow
