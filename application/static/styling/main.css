@@ -16,7 +16,8 @@
 
 
 #app {
-    background-color: rgb(254, 242, 106);
+    /* background-color: rgb(249, 222, 141); */
+    background-color: rgb(255, 239, 191);
 }
 
 .settings_title {
@@ -54,7 +55,8 @@
 .settings {
     display: flex;
     flex-direction: row;
-    background-color: rgb(255, 213, 213);
+    /* background-color: rgb(96%, 72%, 80%); */
+    background-color: rgb(255, 213, 228);
     border: 2px solid red;
     height: 100%;
 }
@@ -69,7 +71,8 @@ form {
 
 .dropdowns {
     width: 50%;
-    background-color: rgb(180, 229, 255);
+    /* background-color:rgb(95, 178, 230); */
+    background-color:rgb(170, 215, 242);
 }
 
 .selections_container {
@@ -136,7 +139,7 @@ form {
     flex-direction: column;
     justify-content: center;
     width: 50%;
-    background-color: rgb(255, 213, 213);
+    background-color: rgb(255, 213, 228);
 }
 
 .settings_side {
@@ -144,7 +147,7 @@ form {
     flex-direction: column;
     justify-content: center;
     width: 50%;
-    background-color: rgb(180, 229, 255);
+    background-color:rgb(170, 215, 242);
 }
 
 .home_titles {
@@ -173,14 +176,20 @@ p {
 }
 
 .header_row {
-    background-color: rgb(255, 213, 213);
+    background-color:  rgb(255, 213, 228);
 }
 
 .td_row {
-    background-color: rgb(180, 229, 255);
+    background-color:rgb(170, 215, 242);
 }
 
 #results_table {
+    display: flex;
+    border: 3px solid rgb(1, 99, 203);
+    align-items: center;
+}
+
+#recents_table {
     display: flex;
     border: 3px solid rgb(1, 99, 203);
     align-items: center;

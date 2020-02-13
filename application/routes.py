@@ -65,6 +65,7 @@ def search():
             infos = daily_mail_sources + the_sun_sources + bbc_sources
             return render_template('profile.html', infos=infos, recents=recents)
     else:
+        database.write_user_keyword(keyword, current_user.id)
         id_search = database.get_keyword_id(keyword)
         kw_id = id_search[0].id
         information = database.get_what_you_just_searched(kw_id)

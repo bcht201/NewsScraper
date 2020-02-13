@@ -16,15 +16,15 @@ def db_check_keyword(keyword):
     sql = text("SELECT id, keyword FROM keyword WHERE keyword='" + keyword + "'")
     return read_db(sql)
 
+def get_next_kw_id():
+    sql = text("SELECT id FROM keyword ORDER BY id DESC")
+    return read_db(sql)
+
 def write_keyword(keyword):
     obj = Keyword(
         keyword = keyword
     )
     write_db(obj)
-
-def get_next_kw_id():
-    sql = text("SELECT id FROM keyword ORDER BY id DESC")
-    return read_db(sql)
 
 def write_user_keyword(keyword, user_id):
     keyword_and_id = db_check_keyword(keyword)
