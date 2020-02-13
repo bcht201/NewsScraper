@@ -10,9 +10,16 @@ from application.helper_functions import check_keyword, cut_down, batch_write, e
 
 routes = Blueprint("routes", __name__)
 
-@app.route('/', )
+@app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html', user=current_user)
+    return render_template('index.html')
+
+@app.route('/home', methods=['GET'])
+@login_required
+def index_home():
+    settings = database.get_current_settings(current_user.id)
+    return render_template('index.html', user=current_user, settings=settings[0])
+
 
 @app.route('/profile', methods=['GET'])
 @login_required

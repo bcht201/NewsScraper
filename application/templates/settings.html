@@ -3,8 +3,8 @@
 {% block body %}
 <div class="master">
     <div>
-        <h1 class="title has-text-link">This is the settings page!</h1>
-        <h1 class="title has-text-link">{{current_user.name}}'s Account</h1>
+        <h1 class="has-text-link settings_title">Settings</h1>
+        <h1 class="title has-text-danger">{{current_user.name}}'s Account</h1>
         <br>
         <br>
         {% if updated %}
@@ -43,11 +43,10 @@
             <form action="/settings_update" method="POST">
                 <div class="selections_container">
                     <div class="bbc_drop">
-                        <h3 class="has-text-danger">BBC articles desired:</h3>
+                        <h3 class="dropdown_title">BBC articles desired:</h3>
                         <div class="select is-danger">
                             <select name="BBC">
-                                <option>Select dropdown</option>
-                                <option value="0">None</option>
+                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -57,11 +56,10 @@
                         </div>
                     </div>
                     <div class="dm_drop">
-                        <h3 class="has-text-danger">Daily Mail articles desired:</h3>
+                        <h3 class="dropdown_title">Daily Mail articles desired:</h3>
                         <div class="select is-danger">
                             <select name="DM">
-                                <option>Select dropdown</option>
-                                <option value="0">None</option>
+                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -71,11 +69,10 @@
                         </div>
                     </div>
                     <div class="ts_drop">
-                        <h3 class="has-text-danger">The Sun articles desired:</h3>
+                        <h3 class="dropdown_title">The Sun articles desired:</h3>
                         <div class="select is-danger">
                             <select name="TS">
-                                <option>Select dropdown</option>
-                                <option value="0">None</option>
+                                <option value="0">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -85,7 +82,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="submit" class="button is-danger is-outlined is-rounded" value="Confirm changes"> 
+                <input type="submit" class="button is-large is-link is-rounded" id="search_btn" value="Confirm changes"> 
             </form>
         </div>
     </div>
