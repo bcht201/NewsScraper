@@ -2,7 +2,25 @@
 
 {% block body %}
 
-<h1 class="title is-1 has-text-danger">Welcome {{current_user.name}}</h1>
-<h2 class="subtitle">Here is your new scraper app</h2>
-<h2 class="subtitle">Hit the home button to starts searching</h2>
+    <h1 class="title is-1 has-text-danger">Welcome {{current_user.name}}</h1>
+    <h2 class="subtitle">Here is your NewsScraper app</h2>
+    <p>Here you can put together your own personal news dashboard and search for specific news articles from the BBC, Daily Mail and The Sun.</p>
+    <p>The dashboard will provide you with a table of links based on your search, which will redirect you straight to the full article.</p>
+
+    {% if user %}
+    <div class="home_container">
+        <div class="info_side">
+            <p class="home_titles">What you can do with your own dashboard:</p>
+            <p>Search for articles in the search tab</p>
+            <p>Keep track of your recent searches</p>
+            <p>Change settings to filter the number of articles from each source</p>
+        </div>
+        <div class="settings_side">
+            <p class="home_titles">{{user.name}}, your current setting are: </p>
+            <p>{{settings.BBC_quant}} articles from the BBC</p>
+            <p>{{settings.TS_quant}} articles from The Sun</p>
+            <p>{{settings.DM_quant}} articles from the Daily Mail</p>
+        </div>
+    </div>
+{% endif %}
 {% endblock %}

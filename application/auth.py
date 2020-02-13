@@ -22,7 +22,7 @@ def login_post():
         error = 'Please check your login details and try again.'
         return render_template('login.html', error=error)
     login_user(user, remember=remember)
-    return redirect(url_for('profile'))
+    return redirect(url_for('index_home'))
 
 @auth.route('/signup')
 def signup():
