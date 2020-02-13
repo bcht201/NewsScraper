@@ -2,7 +2,7 @@
 
 {% block body %}
     <div class="container is-fluid">
-        <div >
+        <div class="full_container">
             <h1 class="newsdashboard has-text-link">News Dashboard</h1>
             <p class="subtitle has-text-danger is-2">Welcome, {{current_user.name}}!</p>
             {% if error %}
@@ -18,34 +18,37 @@
                     <input type="submit" class="button is-large is-link is-rounded" id="search_btn" value="Search!"> 
                 </form>
             </div>
-            <div>
-                {% if infos %}
-                <table class="table is-striped">
-                    <tr>
-                        <th>Article Titles</th>
-                        <th>Source</th>
-                    </tr>
-                    {% for info in infos %}
-                    <tr>
-                        <td><a href={{info.link}} target="_blank">{{info.title}}</a></td>
-                        <td>{{info.source}}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                {% endif %}
-                
-            </div>
-            <div>
-                <table class="table">
-                    <tr>
-                        <th>Your recent searches</th>
-                    </tr>
-                    {% for recent in recents %}
-                    <tr>
-                        <td><a href="/search_recent?term={{recent.keyword}}">{{recent.keyword}}</a></td>
-                    </tr>
-                    {% endfor %}
-                </table>
+            <div class="results_recents">
+                    <div class="recents_container">
+                            <table class="table is-striped" id="results_table">
+                                <tr class="header_row">
+                                    <th>Your recent searches</th>
+                                </tr>
+                                {% for recent in recents %}
+                                <tr class="td_row">
+                                    <td><a href="/search_recent?term={{recent.keyword}}">{{recent.keyword}}</a></td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                <div class="results_table">
+                    {% if infos %}
+                    <table class="table is-striped" id="results_table">
+                        <tr class="header_row">
+                            <th>Article Titles</th>
+                            <th>Source</th>
+                        </tr>
+                        {% for info in infos %}
+                        <tr class="td_row">
+                            <td><a href={{info.link}} target="_blank">{{info.title}}</a></td>
+                            <td>{{info.source}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    {% endif %}
+                    
+
+                </div>
             </div>
         </div>
     </div>
