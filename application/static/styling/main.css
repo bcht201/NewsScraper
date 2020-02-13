@@ -14,10 +14,8 @@
     left: 0%;
 }
 
-
 #app {
-    /* background-color: rgb(249, 222, 141); */
-    background-color: rgb(255, 239, 191);
+    background-color: rgb(255, 241, 199);
 }
 
 .settings_title {
@@ -55,8 +53,7 @@
 .settings {
     display: flex;
     flex-direction: row;
-    /* background-color: rgb(96%, 72%, 80%); */
-    background-color: rgb(255, 213, 228);
+    background-color: rgb(255, 228, 238);
     border: 2px solid red;
     height: 100%;
 }
@@ -71,8 +68,7 @@ form {
 
 .dropdowns {
     width: 50%;
-    /* background-color:rgb(95, 178, 230); */
-    background-color:rgb(170, 215, 242);
+    background-color:rgb(209, 237, 255);
 }
 
 .selections_container {
@@ -139,7 +135,7 @@ form {
     flex-direction: column;
     justify-content: center;
     width: 50%;
-    background-color: rgb(255, 213, 228);
+    background-color: rgb(255, 228, 238);
 }
 
 .settings_side {
@@ -147,7 +143,7 @@ form {
     flex-direction: column;
     justify-content: center;
     width: 50%;
-    background-color:rgb(170, 215, 242);
+    background-color:rgb(209, 237, 255);
 }
 
 .home_titles {
@@ -176,11 +172,11 @@ p {
 }
 
 .header_row {
-    background-color:  rgb(255, 213, 228);
+    background-color: rgb(255, 228, 238);
 }
 
 .td_row {
-    background-color:rgb(170, 215, 242);
+    background-color:rgb(209, 237, 255);
 }
 
 #results_table {
@@ -204,5 +200,5 @@ p {
 }
 
 .settings_row {
-    background-color:rgb(170, 215, 242);
+    background-color:rgb(209, 237, 255);
 }
