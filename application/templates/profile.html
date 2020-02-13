@@ -20,16 +20,19 @@
             </div>
             <div class="results_recents">
                     <div class="recents_container">
-                            <table class="table is-striped" id="results_table">
+                        {% if recents %}
+                            <table class="table is-striped" id="recents_table">
                                 <tr class="header_row">
-                                    <th>Your recent searches</th>
+                                    <th>Recent searches</th>
                                 </tr>
+
                                 {% for recent in recents %}
                                 <tr class="td_row">
                                     <td><a href="/search_recent?term={{recent.keyword}}">{{recent.keyword}}</a></td>
                                 </tr>
                                 {% endfor %}
                             </table>
+                            {% endif %}
                         </div>
                 <div class="results_table">
                     {% if infos %}

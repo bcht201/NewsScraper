@@ -16,15 +16,15 @@ def db_check_keyword(keyword):
     sql = text("SELECT id, keyword FROM keyword WHERE keyword='" + keyword + "'")
     return read_db(sql)
 
+def get_next_kw_id():
+    sql = text("SELECT id FROM keyword ORDER BY id DESC")
+    return read_db(sql)
+
 def write_keyword(keyword):
     obj = Keyword(
         keyword = keyword
     )
     write_db(obj)
-
-def get_next_kw_id():
-    sql = text("SELECT id FROM keyword ORDER BY id DESC")
-    return read_db(sql)
 
 def write_user_keyword(keyword, user_id):
     keyword_and_id = db_check_keyword(keyword)
@@ -39,7 +39,7 @@ def get_keyword_id(keyword):
     return read_db(sql)
 
 def recent_keywords(user_id):
-    sql = text("SELECT DISTINCT user_search.id, keyword.keyword FROM user_search JOIN keyword ON user_search.keyword_id = keyword.id WHERE user_search.user_id = " + user_id)
+    sql = text("SELECT DISTINCT user_search.id, keyword.keyword FROM user_search JOIN keyword ON user_search.keyword_id = keyword.id WHERE user_search.user_id = " + user_id + " ORDER BY user_search.id DESC")
     return read_db(sql)
 
 def get_what_you_just_searched(key_id):
