@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 
 {% block body %}
+    <h1 class="title is-1 has-text-danger">Welcome {{current_user.name}}</h1>
+    <h2 class="subtitle">Here is your new scraper app</h2>
+{% if user %}
+    <p>{{user.name}} remember your scrape settings...</p>
+    <p>BBC articles: {{settings.BBC_quant}}</p>
+    <p>The Sun articles: {{settings.TS_quant}}</p>
+    <p>Daily Mail articles: {{settings.DM_quant}}</p>
 
-<h1 class="title is-1 has-text-danger">Welcome {{current_user.name}}</h1>
-<h2 class="subtitle">Here is your new scraper app</h2>
-<h2 class="subtitle">Hit the home button to starts searching</h2>
+{% endif %}
 {% endblock %}

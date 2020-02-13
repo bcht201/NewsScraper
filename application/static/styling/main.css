@@ -24,6 +24,17 @@
     height: 80vh;
 }
 
+.error_container {
+    margin-bottom: 2%;
+    font-variant: small-caps;
+}
+
+.error_banner {
+    font-size: 20px;
+    color: hsl(348, 100%, 61%);
+    font-weight: bold;
+}
+
 #searchbar {
     border: 4px solid  hsl(348, 100%, 61%);
 }

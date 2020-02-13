@@ -4,9 +4,11 @@
     <div class="container is-fluid">
         <div >
             <h1 class="newsdashboard has-text-link">News Dashboard</h1>
-            <p class="title has-text-danger is-2">Welcome, {{current_user.name}}!</p>
-            {% if updated %}
-            <h1>Well done, your settings have been updated!</h1>
+            <p class="subtitle has-text-danger is-2">Welcome, {{current_user.name}}!</p>
+            {% if error %}
+            <div class="error_container">
+                <h1 class="error_banner">No Results with this search, please search something else.</h1>
+            </div>
             {% endif %}
             <div class="field">
                 <form action="/search" method="POST">
@@ -16,9 +18,6 @@
                     <input type="submit" class="button is-large is-link is-rounded" id="search_btn" value="Search!"> 
                 </form>
             </div>
-            {% if error %}
-            <h1>No Results with this search, please search something else.</h1>
-            {% endif %}
             <div>
                 {% if infos %}
                 <table class="table is-striped">
