@@ -62,7 +62,7 @@ def search():
             bbc_sources = cut_down(information, "BBC", bbc_setting)
             the_sun_sources = cut_down(information, "The Sun", ts_setting)
             daily_mail_sources = cut_down(information, "Daily Mail", dm_setting)
-            infos = daily_mail_sources + the_sun_sources + bbc_sources
+            infos = bbc_sources + daily_mail_sources + the_sun_sources
             return render_template('profile.html', infos=infos, recents=recents)
     else:
         database.write_user_keyword(keyword, current_user.id)
@@ -76,7 +76,7 @@ def search():
         bbc_sources = cut_down(information, "BBC", bbc_setting)
         the_sun_sources = cut_down(information, "The Sun", ts_setting)
         daily_mail_sources = cut_down(information, "Daily Mail", dm_setting)
-        infos = daily_mail_sources + the_sun_sources + bbc_sources
+        infos = bbc_sources + daily_mail_sources + the_sun_sources
         return render_template('profile.html', infos=infos, recents=recents)
 
 @app.route('/search_recent')
@@ -93,7 +93,7 @@ def search_recent():
     bbc_sources = cut_down(infos, "BBC", bbc_setting)
     the_sun_sources = cut_down(infos, "The Sun", ts_setting)
     daily_mail_sources = cut_down(infos, "Daily Mail", dm_setting)
-    infos = daily_mail_sources + the_sun_sources + bbc_sources
+    infos = bbc_sources + daily_mail_sources + the_sun_sources
     return render_template('profile.html', infos=infos, recents=recents)
 
 @app.route('/settings_update', methods=['POST'])
