@@ -198,3 +198,11 @@ p {
 .recents_container {
     margin-right: 5%;
 }
+
+.settings_header_row {
+    background-color:   rgb(255, 239, 191);
+}
+
+.settings_row {
+    background-color:rgb(170, 215, 242);
+}
