@@ -3,8 +3,8 @@
 {% block body %}
     <div class="container is-fluid">
         <div >
-            <h1 class="newsdashboard">News Dashboard</h1>
-            <p class="title has-text-danger is-2">Welcome, {{current_user.name}}!!!</p>
+            <h1 class="newsdashboard has-text-link">News Dashboard</h1>
+            <p class="title has-text-danger is-2">Welcome, {{current_user.name}}!</p>
             {% if updated %}
             <h1>Well done, your settings have been updated!</h1>
             {% endif %}
@@ -13,7 +13,7 @@
                     <input type="text" id="searchbar" class="input is-large is-danger is-rounded" name="search" placeholder="Search for your news articles here!" required>
                     <br>
                     <br>
-                    <input type="submit" class="button is-large is-danger is-outlined is-rounded" value="Search!"> 
+                    <input type="submit" class="button is-large is-link is-rounded" id="search_btn" value="Search!"> 
                 </form>
             </div>
             {% if error %}
