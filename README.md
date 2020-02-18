@@ -1,4 +1,6 @@
 # News Scraper
+### 
+Over the course of a week, together with Harry (HDB-1) we will build a news dashboard. The idea is that news websites (e.g. BBC) are all very accessible by themselves but if a user wants to search for news from a variety of sources in parallel, there is no central platform to do so. By using Beautiful Soup, the dashboard will scrape from 3 sources (BBC, The Daily Mail and The Sun) for articles based on the search-word inputted by the user and return a list of articles based on their personal settings.
 
 ## MVP
 - User authentication - FlaskAuth/flask-login
