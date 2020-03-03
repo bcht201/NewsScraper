@@ -16,7 +16,7 @@ Over the course of a week, together with Harry (HDB-1) we will build a news dash
 - Flask_login / Werkzeug_Security
 - Bulma
 
-## User stories *(*not implemented*)
+## User stories (Bracketed stories were not implemented but originally planned as a user story)
 - As a user, if I am new to the website, I should be able to sign up
 - As a user, if I already have an account, I should be able to log in
 - As a user, if I am logged in, I should be able to see my dashboard 
